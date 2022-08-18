@@ -3,12 +3,17 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Android_Studio/Swipe/app/src/main/res/drawable/bottom_gradient.xml" value="0.209" />
         <entry key="..\:/Android_Studio/Swipe/app/src/main/res/drawable/ic_baseline_close_24.xml" value="0.2685" />
+        <entry key="..\:/Android_Studio/Swipe/app/src/main/res/drawable/ic_baseline_insert_link_24.xml" value="0.209" />
+        <entry key="..\:/Android_Studio/Swipe/app/src/main/res/drawable/ic_baseline_refresh_24.xml" value="0.209" />
+        <entry key="..\:/Android_Studio/Swipe/app/src/main/res/drawable/ic_baseline_whatshot_24.xml" value="0.209" />
         <entry key="..\:/Android_Studio/Swipe/app/src/main/res/drawable/round_back.xml" value="0.2685" />
         <entry key="..\:/Android_Studio/Swipe/app/src/main/res/drawable/stroke_back.xml" value="0.2685" />
-        <entry key="..\:/Android_Studio/Swipe/app/src/main/res/layout/activity_main.xml" value="0.3390625" />
+        <entry key="..\:/Android_Studio/Swipe/app/src/main/res/layout/activity_main.xml" value="0.2177257525083612" />
         <entry key="..\:/Android_Studio/Swipe/app/src/main/res/layout/fragment_new__product_.xml" value="0.21993243243243243" />
         <entry key="..\:/Android_Studio/Swipe/app/src/main/res/layout/fragment_product__list_.xml" value="0.21993243243243243" />
+        <entry key="..\:/Android_Studio/Swipe/app/src/main/res/layout/item_feed.xml" value="0.3390625" />
         <entry key="..\:/Android_Studio/Swipe/app/src/main/res/layout/item_products.xml" value="0.3390625" />
         <entry key="..\:/Android_Studio/Swipe/app/src/main/res/layout/item_selected_images.xml" value="0.3380208333333333" />
         <entry key="..\:/Android_Studio/Swipe/app/src/main/res/xml/provider_paths.xml" value="0.16197916666666667" />

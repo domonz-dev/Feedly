@@ -5,7 +5,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ApiClient
 {
-    public static final String BASE_URL = "https://app.getswipe.in";
+    public static final String BASE_URL = "https://cloud.feedly.com";
 
     private static Retrofit retrofit = null;
 

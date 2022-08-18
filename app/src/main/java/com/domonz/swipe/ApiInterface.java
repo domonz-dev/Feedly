@@ -10,9 +10,16 @@ import retrofit2.http.GET;
 import retrofit2.http.POST;
 
 public interface ApiInterface {
-    @GET("/api/public/get")
-    Call<Object> getProducts();
+    @GET("/v3/streams/contents?streamId=feed/http://rss.cnn.com/rss/cnn_topstories.rss")
+    Call<Object> getCNN();
 
-    @POST("/api/public/add")
-    Call<ResponseBody> uploadMultiFile(@Body RequestBody file);
+    @GET("/v3/streams/contents?streamId=feed/http://feeds.bbci.co.uk/news/world/rss.xml")
+    Call<Object> getBBC();
+
+    @GET("/v3/streams/contents?streamId=feed/https://www.newsweek.com/rss")
+    Call<Object> getNewsWeek();
+
+    @GET("/v3/streams/contents?streamId=feed/http://www.washingtonpost.com/rss/entertainment")
+    Call<Object> getWashingtonPost();
+
 }

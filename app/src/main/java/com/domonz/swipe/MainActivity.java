@@ -1,18 +1,35 @@
 package com.domonz.swipe;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
-import android.view.View;
-import android.widget.FrameLayout;
-import android.widget.TextView;
+import android.util.Log;
+
+import com.google.gson.Gson;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.Comparator;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity  {
 
-    TextView btnNewProduct;
-    int current = 0;
+
+    RecyclerView rec_feeds;
+    ArrayList<FeedModel> feeds;
+    ArrayList<String> feedObjects;
+    int feedsSize = 4;
+    ApiInterface apiService;
+    ArrayList<Call<Object>> apis;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,43 +38,79 @@ public class MainActivity extends AppCompatActivity  {
         initialize();
     }
 
-    private void initialize(){
-
-        btnNewProduct = findViewById(R.id.btnNewProduct);
-
-        setFragment(new Product_List_Frag());
-
-
-        btnNewProduct.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                setFragment(new New_Product_Frag());
-                btnNewProduct.setVisibility(View.GONE);
-                current = 1;
-            }
-        });
+    private void addAPIToList(){
+        apis = new ArrayList<>();
+        apis.add(apiService.getBBC());
+        apis.add(apiService.getNewsWeek());
+        apis.add(apiService.getCNN());
+        apis.add(apiService.getWashingtonPost());
 
     }
 
-    protected void setFragment(Fragment fragment) {
+    private void initialize(){
+        apiService =
+                ApiClient.getClient().create(ApiInterface.class);
+        rec_feeds = findViewById(R.id.rec_feeds);
+        feedObjects = new ArrayList<>();
+        feeds = new ArrayList<>();
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        rec_feeds.setLayoutManager(layoutManager);
+        addAPIToList();
+
+        for(int i = 0; i < apis.size(); i++){
+            getFeeds(i);
+        }
+    }
+
+    private void getFeedsAt(String i){
+
         try {
-            FragmentTransaction t = getSupportFragmentManager().beginTransaction();
-            t.replace(R.id.frag_container, fragment);
-            t.commit();
-        }catch (Exception e){
+            JSONObject p_obj = new JSONObject(i);
+            JSONArray items_arr = p_obj.getJSONArray("items");
+
+            for(int j = 0; j < items_arr.length(); j++){
+                JSONObject obj = items_arr.getJSONObject(j);
+                String title = obj.getString("title");
+                //String imageUrl = obj.getJSONObject("visual").getString("url");
+                String category = p_obj.getString("title");
+                String webName = p_obj.getString("title");
+                String webUrl = obj.getJSONObject("origin").getString("htmlUrl");
+                float pop = Float.parseFloat(!obj.has("engagement")?"0.0": obj.getString("engagement"));
+                FeedModel fm = new FeedModel(title, category, "", webName, webUrl, pop);
+                feeds.add(fm);
+            }
+
+
+            feeds.sort(new Comparator<FeedModel>() {
+                @Override
+                public int compare(FeedModel feedModel, FeedModel t1) {
+                    return (int) (t1.popularity - feedModel.popularity);
+                }
+            });
+            AdapterFeeds adapterFeeds = new AdapterFeeds(this, feeds);
+            rec_feeds.setAdapter(adapterFeeds);
+        } catch (JSONException e) {
             e.printStackTrace();
         }
 
     }
 
-    @Override
-    public void onBackPressed() {
-        if(current == 1){
-            setFragment(new Product_List_Frag());
-            current = 0;
-            btnNewProduct.setVisibility(View.VISIBLE);
-        }else{
-            super.onBackPressed();
-        }
+    private void getFeeds(int pos){
+        Call<Object> call = apis.get(pos);
+        call.enqueue(new Callback<Object>() {
+            @Override
+            public void onResponse(@NonNull Call<Object> call, @NonNull Response<Object> response) {
+                String js = new Gson().toJson(response.body());
+                getFeedsAt(js);
+                //feedObjects.add(js);
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<Object> call, Throwable t) {
+                Log.e("TAG", "onFailure: "+t.toString() );
+            }
+        });
+
     }
+
 }
